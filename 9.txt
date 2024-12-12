@@ -1,0 +1,52 @@
+
+1. Create and Insert Records in 'zipcode' collection:
+
+db.zipcode.insertMany([
+  { city: "New York", state: "NY", population: 8175133 },
+  { city: "Los Angeles", state: "CA", population: 3792621 },
+  { city: "Chicago", state: "IL", population: 2695598 },
+  { city: "Houston", state: "TX", population: 2129784 },
+  { city: "Phoenix", state: "AZ", population: 1445632 },
+  { city: "San Antonio", state: "TX", population: 1327407 },
+  { city: "San Diego", state: "CA", population: 1406630 },
+  { city: "Dallas", state: "TX", population: 1341075 },
+  { city: "San Jose", state: "CA", population: 1026908 },
+  { city: "Austin", state: "TX", population: 964254 }
+]);
+
+2. Execute Queries:
+
+i) Display all records from the collection:
+
+db.zipcode.find().pretty();
+
+ii) Display total population statewise:
+
+db.zipcode.aggregate([
+  {
+    $group: {
+      _id: "$state",
+      totalPopulation: { $sum: "$population" }
+    }
+  }
+]);
+
+iii) Display total population statewise where population > 20000:
+
+db.zipcode.aggregate([
+  { $match: { population: { $gt: 20000 } } },
+  {
+    $group: {
+      _id: "$state",
+      totalPopulation: { $sum: "$population" }
+    }
+  }
+]);
+
+iv) Create index on state:
+
+db.zipcode.createIndex({ state: 1 });
+
+v) Display all indexes for the collection:
+
+db.zipcode.getIndexes();
